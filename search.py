@@ -103,12 +103,14 @@ def dfs(problem: SearchProblem):
     print("Start's successors:", problem.get_successors(problem.get_start_state()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+
+    return general_search(problem, util.LIFO)
 
 def bfs(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    return general_search(problem, util.FIFO)
 
 def ucs(problem: SearchProblem):
     """Search the node of least total cost first."""
@@ -126,4 +128,40 @@ def astar(problem: SearchProblem, heuristic=null_heuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
+
+def general_search(problem: SearchProblem, data_structure):
+    """
+    General algorithm for searching, fringe managing is defined by the data structure of each algorithm. 
+    Each node is composed by (state, actions, cost)
+    state= current state in the search problem in (x,y) coodinates
+    actions= list of actions to get to current state
+    cost= to reach this state
+    """
+    fringe = data_structure()
+    start_position = problem.get_start_state()
+    fringe.put((start_position, [], 0))
+    visited_set = set()
+
+    while not fringe.is_empty():
+        "Remove one node from the fringe and unpack (state, actions,cost)"
+        node = fringe.get()
+        state, actions, cost = node
+
+        if state in visited_set:
+            continue
+        visited_set.add(state)
+
+        if problem.is_goal_state(state):
+            return actions
+        "Loop the successors of current state"
+
+        for next_state, action, next_cost in problem.get_successors(state):
+        
+            new_cost = cost + next_cost
+            new_actions = actions + [action]
+            new_node = (next_state, new_actions, new_cost)
+            fringe.put(new_node)
+                
+
+    return []  # No solution
 
