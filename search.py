@@ -102,20 +102,18 @@ def dfs(problem: SearchProblem):
     print("Is the start a goal?", problem.is_goal_state(problem.get_start_state()))
     print("Start's successors:", problem.get_successors(problem.get_start_state()))
     """
-    "*** YOUR CODE HERE ***"
 
-
-    return general_search(problem, util.LIFO)
+    return general_search(problem, util.LIFO())
 
 def bfs(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    return general_search(problem, util.FIFO)
+    
+    return general_search(problem, util.FIFO())
 
 def ucs(problem: SearchProblem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    return general_search(problem, util.PriorityQueueWithFunction(lambda state: state[2]))
 
 def null_heuristic(state, problem=None):
     """
@@ -129,7 +127,7 @@ def astar(problem: SearchProblem, heuristic=null_heuristic):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
-def general_search(problem: SearchProblem, data_structure):
+def general_search(problem: SearchProblem, fringe):
     """
     General algorithm for searching, fringe managing is defined by the data structure of each algorithm. 
     Each node is composed by (state, actions, cost)
@@ -137,7 +135,6 @@ def general_search(problem: SearchProblem, data_structure):
     actions= list of actions to get to current state
     cost= to reach this state
     """
-    fringe = data_structure()
     start_position = problem.get_start_state()
     fringe.put((start_position, [], 0))
     visited_set = set()
