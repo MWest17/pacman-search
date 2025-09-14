@@ -124,8 +124,9 @@ def null_heuristic(state, problem=None):
 
 def astar(problem: SearchProblem, heuristic=null_heuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    return general_search(problem, util.PriorityQueueWithFunction(lambda state: state[2] + heuristic(state[0], problem)))
+    
 
 def general_search(problem: SearchProblem, fringe):
     """
