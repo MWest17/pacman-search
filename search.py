@@ -78,6 +78,13 @@ class SearchProblem:
         util.raiseNotDefined()
 
 
+class Node():
+    def __init__(self, state, actions, cost):
+        self.state = state
+        self.actions = actions
+        self.cost = cost
+
+
 def tinymaze_search(problem):
     """
     Returns a sequence of moves that solves tinyMaze.  For any other maze, the
@@ -91,29 +98,22 @@ def tinymaze_search(problem):
 def dfs(problem: SearchProblem):
     """
     Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
-    print("Start:", problem.get_start_state())
-    print("Is the start a goal?", problem.is_goal_state(problem.get_start_state()))
-    print("Start's successors:", problem.get_successors(problem.get_start_state()))
     """
+    return general_search(problem, 
+                          util.LIFO())
 
-    return general_search(problem, util.LIFO())
 
 def bfs(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    
-    return general_search(problem, util.FIFO())
+    return general_search(problem, 
+                          util.FIFO())
+
 
 def ucs(problem: SearchProblem):
     """Search the node of least total cost first."""
+    return general_search(problem, 
+                          util.PriorityQueueWithFunction(lambda node: node.cost))
 
-    return general_search(problem, util.PriorityQueueWithFunction(lambda state: state[2]))
 
 def null_heuristic(state, problem=None):
     """
@@ -122,10 +122,11 @@ def null_heuristic(state, problem=None):
     """
     return 0
 
+
 def astar(problem: SearchProblem, heuristic=null_heuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-
-    return general_search(problem, util.PriorityQueueWithFunction(lambda state: state[2] + heuristic(state[0], problem)))
+    return general_search(problem, 
+                          util.PriorityQueueWithFunction(lambda node: node.cost + heuristic(node.state, problem)))
     
 
 def general_search(problem: SearchProblem, fringe):
@@ -137,29 +138,28 @@ def general_search(problem: SearchProblem, fringe):
     cost= to reach this state
     """
     start_position = problem.get_start_state()
-    fringe.put((start_position, [], 0))
+    fringe.put(Node(start_position, [], 0))
     visited_set = set()
 
     while not fringe.is_empty():
-        "Remove one node from the fringe and unpack (state, actions,cost)"
+        "Remove one node from the fringe and unpack (state, actions, cost)"
         node = fringe.get()
-        state, actions, cost = node
 
-        if state in visited_set:
+        if node.state in visited_set:
             continue
-        visited_set.add(state)
+        visited_set.add(node.state)
 
-        if problem.is_goal_state(state):
-            return actions
+        if problem.is_goal_state(node.state):
+            return node.actions
         "Loop the successors of current state"
 
-        for next_state, action, next_cost in problem.get_successors(state):
+        for next_state, next_action, next_cost in problem.get_successors(node.state):
         
-            new_cost = cost + next_cost
-            new_actions = actions + [action]
-            new_node = (next_state, new_actions, new_cost)
-            fringe.put(new_node)
-                
+            new_cost = node.cost + next_cost
+            new_actions = node.actions + [next_action]
+            new_node = Node(next_state, new_actions, new_cost)
+            fringe.put(new_node)     
 
     return []  # No solution
+
 
