@@ -95,6 +95,7 @@ def tinymaze_search(problem):
     w = Directions.WEST
     return [s, s, w, s, w, w, s, w]
 
+
 def dfs(problem: SearchProblem):
     """
     Search the deepest nodes in the search tree first.
@@ -133,21 +134,21 @@ def general_search(problem: SearchProblem, fringe):
     """
     General algorithm for searching, fringe managing is defined by the data structure of each algorithm. 
     Each node is composed by (state, actions, cost)
-    state= current state in the search problem in (x,y) coodinates
+    state= current state in the search problem (eg (x,y) coodinates)
     actions= list of actions to get to current state
     cost= to reach this state
     """
     start_position = problem.get_start_state()
     fringe.put(Node(start_position, [], 0))
-    visited_set = set()
+    visited_set = [] # Is there any real benefit for us keeping this a set (other than random access speed)?
 
     while not fringe.is_empty():
-        "Remove one node from the fringe and unpack (state, actions, cost)"
+        "Remove one node from the fringe"
         node = fringe.get()
 
         if node.state in visited_set:
             continue
-        visited_set.add(node.state)
+        visited_set.append(node.state)
 
         if problem.is_goal_state(node.state):
             return node.actions
