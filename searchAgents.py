@@ -320,9 +320,7 @@ class CornersProblem(search.SearchProblem):
             else:
                 reached[corner] = False
 
-        returnVal = (self.startingPosition, reached)
-        print(returnVal)
-        return returnVal
+        return (self.startingPosition, reached)
 
     def is_goal_state(self, state: Any):
         """
@@ -356,7 +354,7 @@ class CornersProblem(search.SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             nextxy = (nextx, nexty)
-            cost = 1 #self.costFn(nextxy)
+            cost = 1
             nextReached = reached.copy()
             hitsWall = self.walls[nextx][nexty]
 
@@ -400,9 +398,27 @@ def corners_heuristic(state: Any, problem: CornersProblem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    position, reached = state 
+    x,y = position
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    # No need to run if we are already at goal
+    if problem.is_goal_state(state):
+        return 0
+
+    # Shortest Manhattan distance to a corner from current position
+    manhattan_distances = []
+    for corner in corners:
+        if reached[corner] == False:           
+            cornerx, cornery = corner
+            dist = abs(cornerx - x) + abs(cornery - y)
+
+            manhattan_distances.append(dist)
+
+    # Distance of the Minimum Spanning Tree
+    
+
+    return min(manhattan_distances) # + Distance of the Minimum Spanning Tree
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your food_heuristic"
