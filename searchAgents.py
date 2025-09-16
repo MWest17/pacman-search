@@ -399,10 +399,6 @@ def corners_heuristic(state: Any, problem: CornersProblem):
     corners = problem.corners # get corners
     position, reached = state
 
-    # If all corners are reached, heuristic is zero
-    if problem.is_goal_state(state):
-        return 0
-
     # create list of unvisited corners
     unvisited = [corner for corner in corners if not reached[corner]]
     current_pos = position
@@ -511,9 +507,26 @@ def food_heuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+
+    #Inadmissable Why?
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+
+    # create list of uneaten food
+    uneaten = [food for food in foodGrid.asList()]
+    current_pos = position
+    total_dist = 0
+
+    # Greedily visit the nearest food until all have been eaten
+    while uneaten:
+        # creates a list of manhatttan distances from current position to every uneaten food
+        distances = [abs(current_pos[0] - x) + abs(current_pos[1] - y) for x, y in uneaten]
+        min_dist = min(distances)
+        total_dist += min_dist
+        closest_food = uneaten[distances.index(min_dist)]
+        current_pos = closest_food
+        uneaten.remove(closest_food)
+
+    return total_dist
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
