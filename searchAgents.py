@@ -330,11 +330,11 @@ class CornersProblem(search.SearchProblem):
         isGoal = True
         
         for corner in self.corners:
-            isGoal &= reached[corner] # Not properly checking if all corners have been reached
-        
-        return isGoal
-        #Goal state is one where we have visited all the corners
+            isGoal &= reached[corner] 
 
+        #Goal state is true when we have visited all the corners
+        return isGoal
+        
     def get_successors(self, state: Any):
         """
         Returns successor states, the actions they require, and a cost of 1.
@@ -396,28 +396,29 @@ def corners_heuristic(state: Any, problem: CornersProblem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    corners = problem.corners # These are the corner coordinates
-    walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-    position, reached = state 
-    x,y = position
+    corners = problem.corners # get corners
+    position, reached = state
 
-    # No need to run if we are already at goal
+    # If all corners are reached, heuristic is zero
     if problem.is_goal_state(state):
         return 0
 
-    # Shortest Manhattan distance to a corner from current position
-    manhattan_distances = []
-    for corner in corners:
-        if reached[corner] == False:           
-            cornerx, cornery = corner
-            dist = abs(cornerx - x) + abs(cornery - y)
+    # create list of unvisited corners
+    unvisited = [corner for corner in corners if not reached[corner]]
+    current_pos = position
+    total_dist = 0
 
-            manhattan_distances.append(dist)
+    # Greedily visit the nearest unvisited corner until all are visited
+    while unvisited:
+        #creates a list of manhatttan distances from current position to every unvisited corner
+        distances = [abs(current_pos[0] - c[0]) + abs(current_pos[1] - c[1]) for c in unvisited]
+        min_dist = min(distances)
+        total_dist += min_dist
+        closest_corner = unvisited[distances.index(min_dist)]
+        current_pos = closest_corner
+        unvisited.remove(closest_corner)
 
-    # Distance of the Minimum Spanning Tree
-    
-
-    return min(manhattan_distances) # + Distance of the Minimum Spanning Tree
+    return total_dist
 
 
 class AStarCornersAgent(SearchAgent):
