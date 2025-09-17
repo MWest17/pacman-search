@@ -504,7 +504,7 @@ def food_heuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
 
     position, foodGrid = state
     
-    # Distance from pacman to farthest pellet
+    # Distance from pacman to closest pellet
     closest_pellet_dist = 0
     if foodGrid.asList():
         dist_list = [abs(position[0] - c[0]) + abs(position[1] - c[1]) for c in foodGrid.asList()]
