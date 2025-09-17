@@ -401,20 +401,14 @@ def corners_heuristic(state: Any, problem: CornersProblem):
 
     # create list of unvisited corners
     unvisited = [corner for corner in corners if not reached[corner]]
-    current_pos = position
-    total_dist = 0
 
-    # Greedily visit the nearest unvisited corner until all are visited
-    while unvisited:
-        #creates a list of manhatttan distances from current position to every unvisited corner
-        distances = [abs(current_pos[0] - c[0]) + abs(current_pos[1] - c[1]) for c in unvisited]
-        min_dist = min(distances)
-        total_dist += min_dist
-        closest_corner = unvisited[distances.index(min_dist)]
-        current_pos = closest_corner
-        unvisited.remove(closest_corner)
-
-    return total_dist
+    # Finding farthest corner by manhattan distance
+    max_dist = 0
+    mylist = [abs(position[0] - c[0]) + abs(position[1] - c[1]) for c in unvisited]
+    if mylist:
+        max_dist = max(mylist)
+    
+    return max_dist
 
 
 class AStarCornersAgent(SearchAgent):
