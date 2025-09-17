@@ -505,12 +505,18 @@ def food_heuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     position, foodGrid = state
     
     # Distance from pacman to farthest pellet
-    dist_farthest = 0
+    closest_pellet_dist = 0
     if foodGrid.asList():
         dist_list = [abs(position[0] - c[0]) + abs(position[1] - c[1]) for c in foodGrid.asList()]
-        dist_farthest = max(dist_list)
+        closest_pellet_dist = min(dist_list)
 
-    return dist_farthest
+    # Max manhattan distance between pellets
+    max_apart_dist=0
+    for food in foodGrid.asList():
+        distances_list = [abs(food[0] - c[0]) + abs(food[1] - c[1]) for c in foodGrid.asList()]
+        max_apart_dist = max(distances_list + [max_apart_dist])
+
+    return closest_pellet_dist + max_apart_dist
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
