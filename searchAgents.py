@@ -508,25 +508,21 @@ def food_heuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
 
-    #Inadmissable Why?
     position, foodGrid = state
+    
+    # Distance from pacman to farthest pellet
+    dist_farthest = 0
+    if foodGrid.asList():
+        dist_list = [abs(position[0] - c[0]) + abs(position[1] - c[1]) for c in foodGrid.asList()]
+        dist_farthest = max(dist_list)
 
-    # create list of uneaten food
-    uneaten = [food for food in foodGrid.asList()]
-    current_pos = position
-    total_dist = 0
+    # Max manhattan distance between pellets
+    max_dist=0
+    for food in foodGrid.asList():
+        distances_list = [abs(food[0] - c[0]) + abs(food[1] - c[1]) for c in foodGrid.asList()]
+        max_dist = max(distances_list + [max_dist])
 
-    # Greedily visit the nearest food until all have been eaten
-    while uneaten:
-        # creates a list of manhatttan distances from current position to every uneaten food
-        distances = [abs(current_pos[0] - x) + abs(current_pos[1] - y) for x, y in uneaten]
-        min_dist = min(distances)
-        total_dist += min_dist
-        closest_food = uneaten[distances.index(min_dist)]
-        current_pos = closest_food
-        uneaten.remove(closest_food)
-
-    return total_dist
+    return max(dist_farthest, max_dist)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
