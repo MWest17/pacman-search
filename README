@@ -1,0 +1,18 @@
+Matthew West & Miguel Osorio Vela
+
+If you want to see our full process, you can see our commits and branches on our github repo for this project:
+https://github.com/MWest17/pacman-search
+
+Engineering Process:
+We worked question by question. First, we knew we wanted to create a generic search function. We both worked independently on a solution at first. We both ended up running into the issue with storing what we had visited (both so our DFS couldn't get stuck and so BFS had the right searched). Once we were confident in BFS and DFS, we just quickly added UCS and A*, since they only required us to use the same generic search with a priority queue. We also added a Node class to improve readability in the lambda functions used in the priority queues.
+
+Then we moved onto q5-q8. q5 was pretty quick to implement. q6 took a little longer. We first implemented a heuristic that found the shortest manhattan distance to a corner. We then later added on the manhattan distance to the other corners.
+
+q7 tricked us up for a little. Our first heuristic was similar to q6. It found the manhattan distance between all the dots, based on the one closest first. This was inconsistent as the optimal path may not eat the closest pellet at first to save cost in backtracking. We eventually made a heuristic that takes the max between the farthest distance from pacman and a pellet and the farthest distance between two pellets. Since pacman needs to eat the farthest, these are both the same cost as the solution or less.
+
+Matthew - For trying to work through a lot of these problems, I drew them out so I could get a better visualization.
+
+
+AI Use:
+Matthew - I did not use any AI beyond searching for basic python syntax (since I am not very familiar with python). e.g. list syntax
+
