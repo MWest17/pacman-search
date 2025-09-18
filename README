@@ -1,4 +1,4 @@
-Matthew West & Miguel Osorio Vela
+Matthew West & Miguel Mateo Osorio Vela
 
 If you want to see our full process, you can see our commits and branches on our github repo for this project:
 https://github.com/MWest17/pacman-search
@@ -12,7 +12,9 @@ q7 tricked us up for a little. Our first heuristic was similar to q6. It found t
 
 Matthew - For trying to work through a lot of these problems, I drew them out so I could get a better visualization.
 
+Miguel Mateo - I came back to my past review exam sheets for Data Structures during the process of finding a general function that could fit all the search algorithms. In these sheets I had simplified the tracing by hand process and was easier to remember the high level concepts of these algorithms to find similiraties. 
+
 
 AI Use:
 Matthew - I did not use any AI beyond searching for basic python syntax (since I am not very familiar with python). e.g. list syntax
-
+Miguel Mateo - I used AI as a suplemental resource to brainstorm, like: things in common between DFS and BSF 
